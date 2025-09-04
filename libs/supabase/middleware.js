@@ -24,28 +24,9 @@ export async function updateSession(request, response) {
   // response.cookies.setAll. Writing logic between the two will cause the
   // response headers to be lost, breaking the authentication flow.
 
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (user) {
-    // Refresh session if expired - required for Server Components
-    // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session) {
-      response.cookies.set('sb-access-token', session.access_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-      })
-      
-      response.cookies.set('sb-refresh-token', session.refresh_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-      })
-    }
-  }
+  // Let Supabase handle its own session management
+  // The createServerClient will automatically handle session refresh and cookie management
+  await supabase.auth.getUser()
 
   return response
 }

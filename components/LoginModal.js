@@ -20,25 +20,35 @@ export default function LoginModal({ isOpen, onClose }) {
       const redirectURL = window.location.origin + "/api/auth/callback";
 
       if (type === "oauth") {
-        await supabase.auth.signInWithOAuth({
+        const { error } = await supabase.auth.signInWithOAuth({
           provider,
           options: {
             redirectTo: redirectURL,
           },
         });
+        
+        if (error) {
+          console.error("OAuth sign-in error:", error);
+          toast.error("Failed to sign in with Google. Please try again.");
+        }
       } else if (type === "magic_link") {
-        await supabase.auth.signInWithOtp({
+        const { error } = await supabase.auth.signInWithOtp({
           email,
           options: {
             emailRedirectTo: redirectURL,
           },
         });
 
-        toast.success("Check your emails!");
-        setIsDisabled(true);
+        if (error) {
+          console.error("Magic link error:", error);
+          toast.error("Failed to send magic link. Please try again.");
+        } else {
+          toast.success("Check your emails!");
+          setIsDisabled(true);
+        }
       }
     } catch (error) {
-      console.log(error);
+      console.error("Unexpected sign-in error:", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);

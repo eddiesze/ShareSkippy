@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/libs/supabase/client";
 import toast from "react-hot-toast";
 import config from "@/config";
+import { useSearchParams } from "next/navigation";
 
 // This a login/singup page for Supabase Auth.
 // Successfull login redirects to /api/auth/callback where the Code Exchange is processed (see app/api/auth/callback/route.js).
@@ -13,6 +14,31 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const searchParams = useSearchParams();
+
+  // Handle error messages from OAuth callback
+  useEffect(() => {
+    const error = searchParams.get("error");
+    if (error) {
+      let errorMessage = "Sign-in failed. Please try again.";
+      
+      switch (error) {
+        case "session_exchange_failed":
+          errorMessage = "Failed to establish session. Please try signing in again.";
+          break;
+        case "no_session":
+          errorMessage = "Session not created. Please try signing in again.";
+          break;
+        case "unexpected_error":
+          errorMessage = "An unexpected error occurred. Please try again.";
+          break;
+        default:
+          errorMessage = `Sign-in error: ${error}`;
+      }
+      
+      toast.error(errorMessage);
+    }
+  }, [searchParams]);
 
   const handleSignup = async (e, options) => {
     e?.preventDefault();
@@ -24,26 +50,36 @@ export default function Login() {
       const redirectURL = window.location.origin + "/api/auth/callback";
 
       if (type === "oauth") {
-        await supabase.auth.signInWithOAuth({
+        const { error } = await supabase.auth.signInWithOAuth({
           provider,
           options: {
             redirectTo: redirectURL,
           },
         });
+        
+        if (error) {
+          console.error("OAuth sign-in error:", error);
+          toast.error("Failed to sign in with Google. Please try again.");
+        }
       } else if (type === "magic_link") {
-        await supabase.auth.signInWithOtp({
+        const { error } = await supabase.auth.signInWithOtp({
           email,
           options: {
             emailRedirectTo: redirectURL,
           },
         });
 
-        toast.success("Check your emails!");
-
-        setIsDisabled(true);
+        if (error) {
+          console.error("Magic link error:", error);
+          toast.error("Failed to send magic link. Please try again.");
+        } else {
+          toast.success("Check your emails!");
+          setIsDisabled(true);
+        }
       }
     } catch (error) {
-      console.log(error);
+      console.error("Unexpected sign-in error:", error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
