@@ -21,8 +21,8 @@ export default function UserRatingsEnhanced({ userId, userRole }) {
         .from('reviews')
         .select(`
           *,
-          reviewer:profiles!reviews_reviewer_id_fkey(*),
-          reviewee:profiles!reviews_reviewee_id_fkey(*)
+          reviewer:profiles!reviews_reviewer_id_fkey(first_name, last_name, email, profile_photo_url),
+          reviewee:profiles!reviews_reviewee_id_fkey(first_name, last_name, email, profile_photo_url)
         `);
 
       if (userRole === 'owner') {

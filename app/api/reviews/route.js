@@ -23,8 +23,8 @@ export async function GET(request) {
       .from('reviews')
       .select(`
         *,
-        reviewer:profiles!reviews_reviewer_id_fkey(name, avatar_url),
-        reviewee:profiles!reviews_reviewee_id_fkey(name, avatar_url),
+        reviewer:profiles!reviews_reviewer_id_fkey(first_name, last_name, email, profile_photo_url),
+        reviewee:profiles!reviews_reviewee_id_fkey(first_name, last_name, email, profile_photo_url),
         meeting:meetings(title, start_datetime, end_datetime)
       `)
       .order('created_at', { ascending: false })
@@ -127,8 +127,8 @@ export async function POST(request) {
       })
       .select(`
         *,
-        reviewer:profiles!reviews_reviewer_id_fkey(name, avatar_url),
-        reviewee:profiles!reviews_reviewee_id_fkey(name, avatar_url),
+        reviewer:profiles!reviews_reviewer_id_fkey(first_name, last_name, email, profile_photo_url),
+        reviewee:profiles!reviews_reviewee_id_fkey(first_name, last_name, email, profile_photo_url),
         meeting:meetings(title, start_datetime, end_datetime)
       `)
       .single();
