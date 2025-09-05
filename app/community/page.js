@@ -128,6 +128,9 @@ export default function CommunityPage() {
       console.log('Dog posts fetched:', dogPosts?.length || 0);
       if (dogPosts && dogPosts.length > 0) {
         console.log('First dog post owner data:', dogPosts[0].owner);
+        console.log('First dog post dog_id:', dogPosts[0].dog_id);
+        console.log('First dog post dog_ids:', dogPosts[0].dog_ids);
+        console.log('First dog post dog data:', dogPosts[0].dog);
       }
 
       // Fetch all dogs for each post (handle both single dog_id and dog_ids array)
@@ -154,6 +157,7 @@ export default function CommunityPage() {
             
             if (!dogsError && allDogs) {
               post.allDogs = allDogs;
+              console.log('Successfully fetched dogs for post:', post.id, 'dogs:', allDogs);
             } else {
               console.error('Error fetching dogs for post:', post.id, dogsError);
               post.allDogs = [];
@@ -455,6 +459,7 @@ export default function CommunityPage() {
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">{post.title}</h3>
                   
                   {/* Dog Information */}
+                  {console.log('Rendering post:', post.id, 'allDogs:', post.allDogs, 'dog_id:', post.dog_id, 'dog_ids:', post.dog_ids)}
                   {post.allDogs && post.allDogs.length > 0 && (
                     <div className="mb-4">
                       {post.allDogs.length === 1 ? (

@@ -666,6 +666,9 @@ export default function ShareAvailability() {
             {/* Day Selection and Time Slots */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold mb-4">Select Available Days and Times</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Please propose times that you tend to be available to meet. We understand schedules may change, but providing your general availability helps match you with others.
+              </p>
               
               {/* Day Selection */}
               <div className="grid grid-cols-7 gap-2 mb-6">
