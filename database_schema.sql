@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS reviews (
   reviewer_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
   reviewee_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
   reviewer_role TEXT NOT NULL CHECK (reviewer_role IN ('requester', 'recipient')),
+  reviewed_role TEXT NOT NULL CHECK (reviewed_role IN ('requester', 'recipient')),
   rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
   comment TEXT NOT NULL CHECK (length(trim(comment)) >= 5),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

@@ -100,10 +100,11 @@ export async function POST(request) {
       return NextResponse.json({ error: 'You can only review meetings that have ended' }, { status: 400 });
     }
 
-    // Determine reviewee (the other participant) and reviewer role
+    // Determine reviewee (the other participant) and roles
     const isRequester = meeting.requester_id === user.id;
     const revieweeId = isRequester ? meeting.recipient_id : meeting.requester_id;
     const reviewerRole = isRequester ? 'requester' : 'recipient';
+    const reviewedRole = isRequester ? 'recipient' : 'requester';
 
     // Check if user has already reviewed this meeting
     const { data: existingReviews, error: existingError } = await supabase
@@ -126,6 +127,7 @@ export async function POST(request) {
         reviewer_id: user.id,
         reviewee_id: revieweeId,
         reviewer_role: reviewerRole,
+        reviewed_role: reviewedRole,
         rating,
         comment: comment.trim()
       })
