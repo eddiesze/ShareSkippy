@@ -68,9 +68,9 @@ export async function PATCH(request, { params }) {
     const { status, message } = await request.json();
 
     // Validate status
-    const validStatuses = ['scheduled', 'cancelled'];
+    const validStatuses = ['pending', 'scheduled', 'cancelled', 'completed'];
     if (!validStatuses.includes(status)) {
-      return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+      return NextResponse.json({ error: `Invalid status: ${status}. Valid statuses are: ${validStatuses.join(', ')}` }, { status: 400 });
     }
 
     // Fetch current meeting

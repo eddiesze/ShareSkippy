@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-export default function Map({ lat, lng, zoom = 12 }) {
+const Map = React.memo(({ lat, lng, zoom = 12 }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -61,4 +61,8 @@ export default function Map({ lat, lng, zoom = 12 }) {
       <div ref={mapRef} className="w-full"></div>
     </div>
   );
-}
+});
+
+Map.displayName = 'Map';
+
+export default Map;

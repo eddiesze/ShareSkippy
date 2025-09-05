@@ -1,57 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React from 'react';
+import { useUserReviews } from '@/hooks/useReviews';
 
-export default function UserReviews({ userId, showAll = false }) {
-  const [reviews, setReviews] = useState([]);
-  const [stats, setStats] = useState({ averageRating: 0, reviewCount: 0, ratingDistribution: {} });
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (userId) {
-      fetchReviews();
-      fetchStats();
-    }
-  }, [userId]);
-
-  const fetchReviews = async () => {
-    try {
-      const limit = showAll ? 50 : 5;
-      const response = await fetch(`/api/reviews?userId=${userId}&limit=${limit}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setReviews(data.reviews || []);
-      } else {
-        setError(data.error || 'Failed to fetch reviews');
-      }
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-      setError('Failed to fetch reviews');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchStats = async () => {
-    try {
-      const response = await fetch(`/api/reviews/stats?userId=${userId}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setStats(data);
-      } else {
-        console.error('Error fetching review stats:', data.error);
-        // Set default stats if API fails
-        setStats({ averageRating: 0, reviewCount: 0, ratingDistribution: {} });
-      }
-    } catch (error) {
-      console.error('Error fetching review stats:', error);
-      // Set default stats if API fails
-      setStats({ averageRating: 0, reviewCount: 0, ratingDistribution: {} });
-    }
-  };
+const UserReviews = React.memo(({ userId, showAll = false }) => {
+  const { data, isLoading, error } = useUserReviews(userId, showAll);
+  
+  const reviews = data?.reviews || [];
+  const stats = data?.stats || { averageRating: 0, reviewCount: 0, ratingDistribution: {} };
 
   const renderStars = (rating) => {
     return (
@@ -177,4 +133,8 @@ export default function UserReviews({ userId, showAll = false }) {
       )}
     </div>
   );
-}
+});
+
+UserReviews.displayName = 'UserReviews';
+
+export default UserReviews;

@@ -1,8 +1,8 @@
 "use client";
 
-import { createClient } from "@/libs/supabase/client";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
 import { Crisp } from "crisp-sdk-web";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "react-hot-toast";
@@ -13,42 +13,8 @@ import config from "@/config";
 // This component is separated from ClientLayout because it needs to be wrapped with <SessionProvider> to use useSession() hook
 const CrispChat = () => {
   const pathname = usePathname();
-  const [data, setData] = useState(null);
+  const { user } = useUser();
   const [crispInitialized, setCrispInitialized] = useState(false);
-
-  // Memoize the supabase client to prevent recreation on every render
-  const supabase = useMemo(() => createClient(), []);
-
-  // This is used to get the user data from Supabase Auth (if logged in) => user ID is used to identify users in Crisp
-  useEffect(() => {
-    let mounted = true;
-    
-    const getUser = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (mounted && user) {
-          setData({ user });
-        }
-      } catch (error) {
-        console.error('Error getting user for Crisp:', error);
-      }
-    };
-    
-    getUser();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (mounted) {
-          setData(session?.user ? { user: session.user } : null);
-        }
-      }
-    );
-
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, [supabase]);
 
   useEffect(() => {
     if (config?.crisp?.id && !crispInitialized) {
@@ -76,10 +42,22 @@ const CrispChat = () => {
 
   // Add User Unique ID to Crisp to easily identify users when reaching support (optional)
   useEffect(() => {
-    if (data?.user && crispInitialized) {
-      Crisp.session.setData({ userId: data.user?.id });
+    if (user && crispInitialized) {
+      Crisp.session.setData({ userId: user.id });
+      
+      // Set user data in Crisp for better support experience
+      Crisp.user.setEmail(user.email);
+      Crisp.user.setNickname(user.user_metadata?.full_name || user.email);
+      Crisp.user.setAvatar(user.user_metadata?.avatar_url);
+      
+      // Set custom data
+      Crisp.user.setData({
+        id: user.id,
+        created_at: user.created_at,
+        last_sign_in: user.last_sign_in_at,
+      });
     }
-  }, [data, crispInitialized]);
+  }, [user, crispInitialized]);
 
   return null;
 };

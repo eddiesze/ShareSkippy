@@ -2,6 +2,7 @@ export interface AvailabilityPost {
   id: string;
   owner_id: string;
   dog_id?: string;
+  dog_ids?: string[];
   post_type: 'dog_available' | 'petpal_available';
   title: string;
   description?: string;
@@ -21,6 +22,8 @@ export interface AvailabilityPost {
   display_lng?: number;
   city_label?: string;
   can_pick_up_drop_off?: boolean;
+  can_pick_up?: boolean;
+  can_drop_off?: boolean;
   preferred_meeting_location?: string;
   status: 'active' | 'inactive' | 'completed';
   community_support_enabled?: boolean;
@@ -59,4 +62,11 @@ export interface AvailabilityPost {
     breed?: string;
     photo_url?: string;
   };
+  allDogs?: {
+    id: string;
+    name: string;
+    breed?: string;
+    photo_url?: string;
+    size?: string;
+  }[];
 }

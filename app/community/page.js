@@ -130,20 +130,36 @@ export default function CommunityPage() {
         console.log('First dog post owner data:', dogPosts[0].owner);
       }
 
-      // Fetch additional dogs for posts with multiple dogs
+      // Fetch all dogs for each post (handle both single dog_id and dog_ids array)
       if (dogPosts) {
         for (let post of dogPosts) {
-          if (post.dog_ids && post.dog_ids.length > 1) {
-            const { data: additionalDogs, error: dogsError } = await supabase
+          let dogIds = [];
+          
+          // Collect all dog IDs from both dog_id and dog_ids fields
+          if (post.dog_id) {
+            dogIds.push(post.dog_id);
+          }
+          if (post.dog_ids && post.dog_ids.length > 0) {
+            dogIds = [...dogIds, ...post.dog_ids];
+          }
+          
+          // Remove duplicates
+          dogIds = [...new Set(dogIds)];
+          
+          if (dogIds.length > 0) {
+            const { data: allDogs, error: dogsError } = await supabase
               .from('dogs')
               .select('id, name, breed, photo_url, size')
-              .in('id', post.dog_ids);
+              .in('id', dogIds);
             
-            if (!dogsError && additionalDogs) {
-              post.allDogs = additionalDogs;
+            if (!dogsError && allDogs) {
+              post.allDogs = allDogs;
+            } else {
+              console.error('Error fetching dogs for post:', post.id, dogsError);
+              post.allDogs = [];
             }
           } else {
-            post.allDogs = post.dog ? [post.dog] : [];
+            post.allDogs = [];
           }
         }
       }
@@ -212,20 +228,36 @@ export default function CommunityPage() {
             .eq('owner_id', currentUser.id)
             .order('created_at', { ascending: false });
 
-          // Fetch additional dogs for posts with multiple dogs
+          // Fetch all dogs for each post (handle both single dog_id and dog_ids array)
           if (myPosts) {
             for (let post of myPosts) {
-              if (post.dog_ids && post.dog_ids.length > 1) {
-                const { data: additionalDogs, error: dogsError } = await supabase
+              let dogIds = [];
+              
+              // Collect all dog IDs from both dog_id and dog_ids fields
+              if (post.dog_id) {
+                dogIds.push(post.dog_id);
+              }
+              if (post.dog_ids && post.dog_ids.length > 0) {
+                dogIds = [...dogIds, ...post.dog_ids];
+              }
+              
+              // Remove duplicates
+              dogIds = [...new Set(dogIds)];
+              
+              if (dogIds.length > 0) {
+                const { data: allDogs, error: dogsError } = await supabase
                   .from('dogs')
                   .select('id, name, breed, photo_url, size')
-                  .in('id', post.dog_ids);
+                  .in('id', dogIds);
                 
-                if (!dogsError && additionalDogs) {
-                  post.allDogs = additionalDogs;
+                if (!dogsError && allDogs) {
+                  post.allDogs = allDogs;
+                } else {
+                  console.error('Error fetching dogs for my post:', post.id, dogsError);
+                  post.allDogs = [];
                 }
               } else {
-                post.allDogs = post.dog ? [post.dog] : [];
+                post.allDogs = [];
               }
             }
           }
@@ -525,6 +557,32 @@ export default function CommunityPage() {
                     <div className="flex items-center text-sm text-red-600 mb-4">
                       <span className="mr-2">🚨</span>
                       Urgent
+                    </div>
+                  )}
+                  
+                  {/* Pickup/Dropoff Information */}
+                  {(post.can_pick_up || post.can_drop_off || post.can_pick_up_drop_off) && (
+                    <div className="mb-4">
+                      <div className="flex flex-wrap gap-2">
+                        {post.can_pick_up_drop_off && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <span className="mr-1">🚗</span>
+                            Can Pick Up & Drop Off
+                          </span>
+                        )}
+                        {post.can_pick_up && !post.can_pick_up_drop_off && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            <span className="mr-1">📤</span>
+                            Can Pick Up
+                          </span>
+                        )}
+                        {post.can_drop_off && !post.can_pick_up_drop_off && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                            <span className="mr-1">📥</span>
+                            Can Drop Off
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
                   

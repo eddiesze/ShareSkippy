@@ -1,8 +1,9 @@
 "use client";
-import { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { createClient } from '@/libs/supabase/client';
+import OptimizedImage from './OptimizedImage';
 
-export default function PhotoUpload({ onPhotoUploaded, initialPhotoUrl, disabled = false, bucketName = 'profile-photos' }) {
+const PhotoUpload = React.memo(({ onPhotoUploaded, initialPhotoUrl, disabled = false, bucketName = 'profile-photos' }) => {
   const [uploading, setUploading] = useState(false);
   const [photoUrl, setPhotoUrl] = useState(initialPhotoUrl);
   const [error, setError] = useState('');
@@ -113,7 +114,7 @@ export default function PhotoUpload({ onPhotoUploaded, initialPhotoUrl, disabled
     }
   };
 
-  const handleFileUpload = async (event) => {
+  const handleFileUpload = useCallback(async (event) => {
     try {
       setError('');
       setUploading(true);
@@ -156,9 +157,9 @@ export default function PhotoUpload({ onPhotoUploaded, initialPhotoUrl, disabled
       setError(`Upload failed: ${error.message || 'Unknown error'}`);
       setUploading(false);
     }
-  };
+  }, [onPhotoUploaded]);
 
-  const removePhoto = async () => {
+  const removePhoto = useCallback(async () => {
     if (photoUrl && photoUrl.includes('supabase')) {
       try {
         // Extract file path from URL
@@ -176,17 +177,20 @@ export default function PhotoUpload({ onPhotoUploaded, initialPhotoUrl, disabled
     
     setPhotoUrl('');
     onPhotoUploaded('');
-  };
+  }, [onPhotoUploaded, photoUrl]);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-4">
         {photoUrl ? (
           <div className="relative">
-            <img
+            <OptimizedImage
               src={photoUrl}
               alt="Profile"
+              width={96}
+              height={96}
               className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+              priority={true}
             />
             {!disabled && (
               <button
@@ -236,4 +240,8 @@ export default function PhotoUpload({ onPhotoUploaded, initialPhotoUrl, disabled
       )}
     </div>
   );
-}
+});
+
+PhotoUpload.displayName = 'PhotoUpload';
+
+export default PhotoUpload;

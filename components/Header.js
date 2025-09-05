@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
+import OptimizedImage from "./ui/OptimizedImage";
 import ButtonSignin from "./ButtonSignin";
 import logo from "@/app/icon.png";
 import config from "@/config";
@@ -33,11 +33,10 @@ const Header = () => {
             href="/"
             title={`${config.appName} homepage`}
           >
-            <Image
+            <OptimizedImage
               src={logo}
               alt={`${config.appName} logo`}
               className="w-8"
-              placeholder="blur"
               priority={true}
               width={32}
               height={32}
@@ -105,11 +104,10 @@ const Header = () => {
               title={`${config.appName} homepage`}
               href="/"
             >
-              <Image
+              <OptimizedImage
                 src={logo}
                 alt={`${config.appName} logo`}
                 className="w-8"
-                placeholder="blur"
                 priority={true}
                 width={32}
                 height={32}

@@ -21,11 +21,19 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get('limit')) || 10;
     const offset = parseInt(searchParams.get('offset')) || 0;
 
-    // Build query
+    // Build query with optimized select
     let query = supabase
       .from('community_events')
       .select(`
-        *,
+        id,
+        title,
+        description,
+        event_type,
+        event_date,
+        location,
+        max_participants,
+        current_participants,
+        created_at,
         organizer:profiles!community_events_organizer_id_fkey(
           id,
           first_name,

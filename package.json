@@ -13,6 +13,7 @@
     "@headlessui/react": "^1.7.18",
     "@supabase/ssr": "^0.4.0",
     "@supabase/supabase-js": "^2.45.0",
+    "@tanstack/react-query": "^5.86.0",
     "axios": "^1.6.8",
     "crisp-sdk-web": "^1.0.22",
     "eslint": "8.47.0",

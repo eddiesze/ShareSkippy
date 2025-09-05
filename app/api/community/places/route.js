@@ -22,11 +22,18 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get('limit')) || 10;
     const offset = parseInt(searchParams.get('offset')) || 0;
 
-    // Build query
+    // Build query with optimized select
     let query = supabase
       .from('local_places')
       .select(`
-        *,
+        id,
+        name,
+        type,
+        description,
+        address,
+        rating,
+        dog_friendly,
+        created_at,
         created_by:profiles!local_places_created_by_fkey(
           id,
           first_name,

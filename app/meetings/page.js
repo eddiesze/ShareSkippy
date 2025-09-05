@@ -1,73 +1,34 @@
 "use client";
-import { useState, useEffect } from 'react';
-import { useSupabaseAuth } from '@/libs/supabase/hooks';
+import { useState } from 'react';
+import { useUser } from '@/contexts/UserContext';
+import { useMeetings, useUpdateMeetingStatus } from '@/hooks/useMeetings';
+import { useQueryClient } from '@tanstack/react-query';
 import ReviewModal from '@/components/ReviewModal';
 
 export default function MeetingsPage() {
-  const { user, loading: authLoading } = useSupabaseAuth();
-  const [meetings, setMeetings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user, loading: authLoading } = useUser();
   const [actionLoading, setActionLoading] = useState(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (user && !authLoading) {
-      fetchMeetings();
-    }
-  }, [user, authLoading]);
+  const { data: meetingsData, isLoading: loading, error } = useMeetings();
+  const updateMeetingStatusMutation = useUpdateMeetingStatus();
 
-  const fetchMeetings = async () => {
-    if (!user) return;
-
-    try {
-      setLoading(true);
-      
-      // First, update any meetings that should be marked as completed
-      await fetch('/api/meetings/update-status', { method: 'POST' });
-      
-      // Then fetch the updated meetings
-      const response = await fetch('/api/meetings');
-      const data = await response.json();
-      
-      if (response.ok) {
-        setMeetings(data.meetings || []);
-      } else {
-        console.error('Error fetching meetings:', data.error);
-      }
-    } catch (error) {
-      console.error('Error fetching meetings:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const meetings = meetingsData?.meetings || [];
 
   const updateMeetingStatus = async (meetingId, status, message) => {
     try {
       setActionLoading(meetingId);
       
-      const response = await fetch(`/api/meetings/${meetingId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status, message }),
+      await updateMeetingStatusMutation.mutateAsync({
+        meetingId,
+        status,
+        message,
       });
-
-      const data = await response.json();
-      
-      if (response.ok) {
-        // Update the meeting in the local state
-        setMeetings(prev => prev.map(meeting => 
-          meeting.id === meetingId ? { ...meeting, status: data.meeting.status } : meeting
-        ));
-      } else {
-        console.error('Error updating meeting:', data.error);
-        alert(data.error || 'Failed to update meeting');
-      }
     } catch (error) {
       console.error('Error updating meeting:', error);
-      alert('Failed to update meeting');
+      alert(`Failed to update meeting: ${error.message || 'Unknown error'}`);
     } finally {
       setActionLoading(null);
     }
@@ -79,30 +40,14 @@ export default function MeetingsPage() {
     try {
       setActionLoading(meetingId);
       
-      const response = await fetch(`/api/meetings/${meetingId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          status: 'cancelled',
-          message: 'This meeting has been cancelled.'
-        }),
+      await updateMeetingStatusMutation.mutateAsync({
+        meetingId,
+        status: 'cancelled',
+        message: 'This meeting has been cancelled.'
       });
-
-      const data = await response.json();
-      
-      if (response.ok) {
-        setMeetings(prev => prev.map(meeting => 
-          meeting.id === meetingId ? { ...meeting, status: data.meeting.status } : meeting
-        ));
-      } else {
-        console.error('Error cancelling meeting:', data.error);
-        alert(data.error || 'Failed to cancel meeting');
-      }
     } catch (error) {
       console.error('Error cancelling meeting:', error);
-      alert('Failed to cancel meeting');
+      alert(`Failed to cancel meeting: ${error.message || 'Unknown error'}`);
     } finally {
       setActionLoading(null);
     }
@@ -160,8 +105,8 @@ export default function MeetingsPage() {
   };
 
   const handleReviewSubmitted = (review) => {
-    // Refresh meetings to update the review status
-    fetchMeetings();
+    // Invalidate and refetch meetings to update the review status
+    queryClient.invalidateQueries({ queryKey: ['meetings', user?.id] });
     setIsReviewModalOpen(false);
     setSelectedReview(null);
   };

@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSupabaseAuth } from '@/libs/supabase/hooks';
+import { useUser } from '@/contexts/UserContext';
+import { useUserProfile, useUserDogs } from '@/hooks/useProfile';
 import { createClient } from '@/libs/supabase/client';
 import AppLayout from '@/components/AppLayout';
 import { Button } from '@/components/ui/Button';
@@ -12,9 +13,13 @@ import CommunitySupportSection from '@/components/CommunitySupportSection';
 import { formatLocation } from '@/libs/utils';
 
 export default function ShareAvailability() {
-  const { user, loading: authLoading } = useSupabaseAuth();
+  const { user, loading: authLoading } = useUser();
   const router = useRouter();
   const supabase = createClient();
+  
+  // Use React Query hooks for data fetching
+  const { data: userProfile, isLoading: profileLoading } = useUserProfile();
+  const { data: dogs, isLoading: dogsLoading } = useUserDogs();
   
   // Check if Supabase is properly configured
   useEffect(() => {
@@ -31,9 +36,7 @@ export default function ShareAvailability() {
   const [postType, setPostType] = useState(null);
   
   // Data states
-  const [dogs, setDogs] = useState([]);
   const [selectedDogs, setSelectedDogs] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   
@@ -91,81 +94,22 @@ export default function ShareAvailability() {
     helping_others_context: ''
   });
 
-  // User profile data for location
-  const [userProfile, setUserProfile] = useState(null);
+  // User profile data for location (now from React Query)
   const [verifyingCustomAddress, setVerifyingCustomAddress] = useState(false);
   const [addressVerified, setAddressVerified] = useState(false);
 
   useEffect(() => {
-    console.log('ShareAvailability useEffect triggered:', { authLoading, user: !!user });
-    
     if (authLoading) {
-      console.log('Still loading auth...');
       return;
     }
     
     if (!user) {
-      console.log('No user found, redirecting to signin');
       router.push('/signin');
       return;
     }
-    
-    console.log('User authenticated, fetching data...');
-    fetchDogs();
-    fetchUserProfile();
   }, [user, authLoading, router]);
 
-  const fetchDogs = async () => {
-    if (!user) {
-      console.log('No user available for fetchDogs');
-      return;
-    }
-
-    try {
-      console.log('Fetching dogs for user:', user.id);
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('dogs')
-        .select('*')
-        .eq('owner_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching dogs:', error);
-        setError('Failed to fetch dogs');
-        return;
-      }
-
-      console.log('Dogs fetched successfully:', data);
-      setDogs(data || []);
-    } catch (error) {
-      console.error('Error fetching dogs:', error);
-      setError('Failed to fetch dogs');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchUserProfile = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        return;
-      }
-
-      setUserProfile(data);
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-    }
-  };
+  // Data is now fetched via React Query hooks
 
   const verifyCustomAddress = async () => {
     if (!formData.custom_location_address.trim() || !formData.custom_location_city.trim() || 
@@ -507,7 +451,7 @@ export default function ShareAvailability() {
     );
   }
 
-  if (loading) {
+  if (authLoading || profileLoading || dogsLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">

@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/libs/supabase/server';
+import { validateRequestBody, meetingValidationSchema } from '@/libs/validation';
+import { apiRateLimit } from '@/libs/rateLimit';
 
 export async function GET(request) {
   try {
@@ -67,12 +69,35 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
+    // Apply rate limiting
+    const rateLimitResult = apiRateLimit(request);
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: rateLimitResult.error.message }, 
+        { 
+          status: 429,
+          headers: {
+            'Retry-After': rateLimitResult.error.retryAfter.toString()
+          }
+        }
+      );
+    }
+
     const supabase = createClient();
     
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const requestBody = await request.json();
+
+    // Validate request body
+    try {
+      validateRequestBody(requestBody, meetingValidationSchema);
+    } catch (validationError) {
+      return NextResponse.json({ error: validationError.message }, { status: 400 });
     }
 
     const { 
@@ -84,23 +109,14 @@ export async function POST(request) {
       meeting_place, 
       start_datetime, 
       end_datetime 
-    } = await request.json();
+    } = requestBody;
 
-    // Validate required fields
-    if (!recipient_id || !title || !meeting_place || !start_datetime || !end_datetime) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    // Validate dates
+    // Additional validation for date relationship
     const startDate = new Date(start_datetime);
     const endDate = new Date(end_datetime);
     
     if (startDate >= endDate) {
       return NextResponse.json({ error: 'End time must be after start time' }, { status: 400 });
-    }
-    
-    if (startDate < new Date()) {
-      return NextResponse.json({ error: 'Meeting cannot be scheduled in the past' }, { status: 400 });
     }
 
     // Create meeting

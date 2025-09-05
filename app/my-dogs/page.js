@@ -1,53 +1,19 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { useSupabaseAuth } from '@/libs/supabase/hooks';
+import { useUser } from '@/contexts/UserContext';
+import { useUserDogs } from '@/hooks/useProfile';
+import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/libs/supabase';
 
 export default function MyDogsPage() {
-  const { user, loading: authLoading, getAccessToken } = useSupabaseAuth();
-  const [dogs, setDogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user, loading: authLoading } = useUser();
   const [error, setError] = useState(null);
+  const queryClient = useQueryClient();
+  
+  const { data: dogs, isLoading: loading, error: dogsError } = useUserDogs();
 
-  useEffect(() => {
-    if (authLoading) return;
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
-    fetchDogs();
-  }, [user, authLoading]);
-
-  const fetchDogs = async () => {
-    if (!user) return;
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Use Supabase client directly for better performance
-      const { data, error } = await supabase
-        .from('dogs')
-        .select('*')
-        .eq('owner_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching dogs:', error);
-        setError('Failed to fetch dogs');
-        return;
-      }
-
-      setDogs(data || []);
-    } catch (error) {
-      console.error('Error fetching dogs:', error);
-      setError('Failed to fetch dogs');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Data is now fetched via React Query hooks
 
   const deleteDog = async (dogId) => {
     if (!user || !confirm('Are you sure you want to delete this dog?')) return;
@@ -65,8 +31,8 @@ export default function MyDogsPage() {
         return;
       }
 
-      // Remove from local state
-      setDogs(dogs.filter(dog => dog.id !== dogId));
+      // Invalidate and refetch dogs data
+      queryClient.invalidateQueries({ queryKey: ['dogs', user?.id] });
     } catch (error) {
       console.error('Error deleting dog:', error);
       setError('Failed to delete dog');

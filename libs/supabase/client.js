@@ -10,5 +10,12 @@ export const createClient = () => {
     throw new Error('Supabase configuration is missing. Please check your environment variables.')
   }
 
-  return createBrowserClient(supabaseUrl, supabaseAnonKey)
+  return createBrowserClient(supabaseUrl, supabaseAnonKey, {
+    // Add performance optimizations
+    global: {
+      headers: {
+        'Connection': 'keep-alive',
+      },
+    },
+  })
 }

@@ -28,5 +28,11 @@ export const createClient = () => {
         }
       },
     },
+    // Add performance optimizations
+    global: {
+      headers: {
+        'Connection': 'keep-alive',
+      },
+    },
   })
 }

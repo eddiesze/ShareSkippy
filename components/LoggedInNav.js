@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/libs/supabase/client";
+import { useUser } from "@/contexts/UserContext";
 import logo from "@/app/icon.png";
 import config from "@/config";
 
@@ -39,17 +39,19 @@ const LoggedInNav = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  
-  // Memoize the supabase client to prevent recreation on every render
-  const supabase = useMemo(() => createClient(), []);
+  const { signOut } = useUser();
 
   useEffect(() => {
     setIsOpen(false);
   }, [searchParams]);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    window.location.href = "/";
+    const { error } = await signOut();
+    if (error) {
+      console.error("Error signing out:", error);
+    } else {
+      window.location.href = "/";
+    }
   };
 
   return (
