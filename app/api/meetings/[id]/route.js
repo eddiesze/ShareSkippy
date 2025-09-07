@@ -61,11 +61,23 @@ export async function PATCH(request, { params }) {
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
+      console.error('Authentication error:', authError);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { id } = params;
-    const { status, message } = await request.json();
+    console.log('PATCH request for meeting ID:', id);
+    
+    let requestBody;
+    try {
+      requestBody = await request.json();
+      console.log('Request body:', requestBody);
+    } catch (parseError) {
+      console.error('Error parsing request body:', parseError);
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+    }
+    
+    const { status, message } = requestBody;
 
     // Validate status
     const validStatuses = ['pending', 'scheduled', 'cancelled', 'completed'];
@@ -148,7 +160,17 @@ export async function PATCH(request, { params }) {
 
   } catch (error) {
     console.error('Error updating meeting:', error);
-    return NextResponse.json({ error: 'Failed to update meeting' }, { status: 500 });
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    // Provide more specific error messages
+    let errorMessage = 'Failed to update meeting';
+    if (error.message) {
+      errorMessage = error.message;
+    }
+    
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 

@@ -37,17 +37,46 @@ export default function MeetingsPage() {
   const cancelMeeting = async (meetingId) => {
     if (!confirm('Are you sure you want to cancel this meeting?')) return;
     
+    // Check if user is authenticated
+    if (!user) {
+      alert('You must be logged in to cancel meetings. Please refresh the page and try again.');
+      return;
+    }
+    
     try {
       setActionLoading(meetingId);
       
-      await updateMeetingStatusMutation.mutateAsync({
+      // Add a timeout to the request
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout - please try again')), 10000);
+      });
+      
+      const updatePromise = updateMeetingStatusMutation.mutateAsync({
         meetingId,
         status: 'cancelled',
         message: 'This meeting has been cancelled.'
       });
+      
+      await Promise.race([updatePromise, timeoutPromise]);
+      
     } catch (error) {
       console.error('Error cancelling meeting:', error);
-      alert(`Failed to cancel meeting: ${error.message || 'Unknown error'}`);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Unknown error';
+      if (error.message) {
+        if (error.message.includes('timeout')) {
+          errorMessage = 'Request timed out. Please check your internet connection and try again.';
+        } else if (error.message.includes('fetch')) {
+          errorMessage = 'Network error. Please check your internet connection and try again.';
+        } else if (error.message.includes('Unauthorized')) {
+          errorMessage = 'You are not authorized to cancel this meeting. Please refresh the page and try again.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
+      alert(`Failed to cancel meeting: ${errorMessage}`);
     } finally {
       setActionLoading(null);
     }

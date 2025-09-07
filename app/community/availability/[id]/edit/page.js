@@ -29,9 +29,7 @@ export default function EditAvailability() {
     can_pick_up_drop_off: false,
     preferred_meeting_location: '',
     enabled_days: [],
-    day_schedules: {},
-    start_date: '',
-    end_date: ''
+    day_schedules: {}
   });
 
   useEffect(() => {
@@ -130,9 +128,7 @@ export default function EditAvailability() {
         can_pick_up_drop_off: data.can_pick_up_drop_off || false,
         preferred_meeting_location: data.preferred_meeting_location || '',
         enabled_days: data.enabled_days || [],
-        day_schedules: data.day_schedules || {},
-        start_date: data.start_date || '',
-        end_date: data.end_date || ''
+        day_schedules: data.day_schedules || {}
       });
     } catch (err) {
       console.error('Error:', err);
@@ -235,8 +231,6 @@ export default function EditAvailability() {
           preferred_meeting_location: formData.preferred_meeting_location,
           enabled_days: formData.enabled_days,
           day_schedules: formData.day_schedules,
-          start_date: formData.start_date,
-          end_date: formData.end_date,
           updated_at: new Date().toISOString()
         })
         .eq('id', params.id);
@@ -709,35 +703,6 @@ export default function EditAvailability() {
                     </div>
                   ))}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-2">
-                        Start Date
-                      </label>
-                      <input
-                        type="date"
-                        id="start_date"
-                        name="start_date"
-                        value={formData.start_date}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 mb-2">
-                        End Date
-                      </label>
-                      <input
-                        type="date"
-                        id="end_date"
-                        name="end_date"
-                        value={formData.end_date}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
 
