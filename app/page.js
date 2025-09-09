@@ -25,11 +25,11 @@ const communityStories = [
     author: "Sarah, Dog Lover"
   },
   {
-    quote: "I work from home and needed a break from Zoom meetings. Walking neighbors&apos; dogs gives me fresh air, exercise, and some seriously good puppy therapy.",
+    quote: "I work from home and needed a break from Zoom meetings. Walking neighbors' dogs gives me fresh air, exercise, and some seriously good puppy therapy.",
     author: "Mike, Remote Worker"
   },
   {
-    quote: "My dog has boundless energy, and I couldn&apos;t keep up. Now he gets playdates with other pups, and I get peace of mind knowing he&apos;s happy and socialized.",
+    quote: "My dog has boundless energy, and I couldn't keep up. Now he gets playdates with other pups, and I get peace of mind knowing he's happy and socialized.",
     author: "Lisa, Dog Owner"
   },
   {
@@ -45,15 +45,15 @@ const communityStories = [
     author: "Maria, Single Parent"
   },
   {
-    quote: "I&apos;ve always wanted a dog but live in an apartment that doesn&apos;t allow pets. Now I get weekend puppy cuddles, and it&apos;s the highlight of my week.",
+    quote: "I've always wanted a dog but live in an apartment that doesn't allow pets. Now I get weekend puppy cuddles, and it's the highlight of my week.",
     author: "Alex, Apartment Dweller"
   },
   {
-    quote: "After moving to a new neighborhood, I didn&apos;t know anyone. Walking dogs with neighbors helped me make friends and get my daily steps in.",
+    quote: "After moving to a new neighborhood, I didn't know anyone. Walking dogs with neighbors helped me make friends and get my daily steps in.",
     author: "Tom, New Neighbor"
   },
   {
-    quote: "I work long hours and couldn&apos;t give Luna the walks she needed. Now neighbors help take her on hikes, and she&apos;s happier than ever.",
+    quote: "I work long hours and couldn't give Luna the walks she needed. Now neighbors help take her on hikes, and she's happier than ever.",
     author: "Rachel, Busy Professional"
   },
   {
@@ -310,7 +310,7 @@ export default function Home() {
 
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-xl text-gray-700 leading-relaxed mb-8">
-              Vets estimate that over <strong>70% of city dogs don&apos;t get enough exercise</strong>. Life happens — some owners are elderly, recovering from illness, juggling long work hours, caring for kids on their own, or managing tight budgets. Pups still need to run, play, and explore. That&apos;s where you come in: <strong>volunteer, make a dog&apos;s AND a human&apos;s day, and get the best reward ever: puppy love</strong>.
+              Vets estimate that over <strong>70% of city dogs don't get enough exercise</strong>. Life happens — some owners are elderly, recovering from illness, juggling long work hours, caring for kids on their own, or managing tight budgets. Pups still need to run, play, and explore. That's where you come in: <strong>volunteer, make a dog's AND a human's day, and get the best reward ever: puppy love</strong>.
             </p>
             
             <div className="text-center">

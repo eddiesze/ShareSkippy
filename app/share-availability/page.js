@@ -504,7 +504,7 @@ export default function ShareAvailability() {
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Share Availability</h1>
-          <p className="text-sm sm:text-base text-gray-600">Let your community know when you&apos;re available to help or need assistance</p>
+          <p className="text-sm sm:text-base text-gray-600">Let your community know when you're available to help or need assistance</p>
         </div>
 
         {/* Progress Steps */}
@@ -580,7 +580,7 @@ export default function ShareAvailability() {
                 <div className="text-4xl mb-4">👤</div>
                 <h3 className="text-xl font-semibold mb-2">I am a PetPal</h3>
                 <p className="text-gray-600 mb-4">
-                  Share when you&apos;re available to get some puppy love.
+                  Share when you're available to get some puppy love.
                 </p>
                 <div className="text-sm text-gray-500">
                   Help others in your neighborhood

@@ -25,7 +25,7 @@ const features = [
               Notifications should be visible only on certain pages.
             </div>
             <div className="opacity-0 group-hover:opacity-100 duration-1000 flex items-center gap-0.5">
-              <span>Terms & privacy pages don&apos;t need them</span>
+              <span>Terms & privacy pages don't need them</span>
               <span className="w-[2px] h-6 bg-primary animate-pulse"></span>
             </div>
             <button className="btn shadow-lg btn-primary absolute right-4 bottom-6 opacity-0 group-hover:opacity-100 duration-1000">

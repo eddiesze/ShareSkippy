@@ -75,7 +75,7 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen w-full bg-white max-w-md mx-auto p-6 text-center space-y-4">
         <h2 className="text-xl font-semibold text-black">Welcome!</h2>
-        <p className="text-gray-600">You haven&apos;t set up your profile yet.</p>
+        <p className="text-gray-600">You haven't set up your profile yet.</p>
         <Link href="/profile/edit" className="inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
           Create Your Profile
         </Link>
