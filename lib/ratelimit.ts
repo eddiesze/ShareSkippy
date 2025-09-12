@@ -35,7 +35,8 @@ export async function rateLimit(
 // Clean up expired entries periodically (optional)
 setInterval(() => {
   const now = Date.now();
-  for (const [key, record] of cache.entries()) {
+  const entries = Array.from(cache.entries());
+  for (const [key, record] of entries) {
     if (record.resetAt < now) {
       cache.delete(key);
     }

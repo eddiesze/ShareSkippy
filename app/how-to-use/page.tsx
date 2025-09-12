@@ -595,26 +595,12 @@ export default function HowToUsePage() {
                   <Link
                     href="/community"
                     className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium"
-                    onClick={() => {
-                      if (typeof window !== 'undefined') {
-                        window.dispatchEvent(new CustomEvent('analytics', {
-                          detail: { event: 'cta_click', target: '/community' }
-                        }));
-                      }
-                    }}
                   >
                     Explore Community →
                   </Link>
                   <Link
                     href="/share-availability"
                     className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200 font-medium"
-                    onClick={() => {
-                      if (typeof window !== 'undefined') {
-                        window.dispatchEvent(new CustomEvent('analytics', {
-                          detail: { event: 'cta_click', target: '/share-availability' }
-                        }));
-                      }
-                    }}
                   >
                     Post Availability →
                   </Link>

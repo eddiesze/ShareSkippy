@@ -7,9 +7,7 @@ import { rateLimit } from '@/lib/ratelimit';
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
-  category: z.enum(['general', 'bug', 'safety', 'feature', 'account', 'other'], {
-    errorMap: () => ({ message: 'Please select a valid category' })
-  }),
+  category: z.enum(['general', 'bug', 'safety', 'feature', 'account', 'other']),
   subject: z.string().min(3, 'Subject must be at least 3 characters'),
   message: z.string().min(5, 'Message must be at least 5 characters').max(2000, 'Message must be less than 2000 characters'),
   hp: z.string().optional(), // Honeypot field
