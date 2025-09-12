@@ -136,7 +136,7 @@ export default function ShareAvailability() {
         
         // Try to extract neighborhood from address details
         if (result.address) {
-          neighborhood = result.address.suburb || result.address.neighbourhood || result.address.district || '';
+          neighborhood = result.address.suburb || result.address.quarter || result.address.neighbourhood || result.address.district || '';
         }
         
         // If no neighborhood found, try to extract from display name

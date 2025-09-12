@@ -34,6 +34,7 @@
     "stripe": "^13.11.0"
   },
   "devDependencies": {
+    "@types/react": "19.1.12",
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.10.1",
     "postcss": "^8.4.38",

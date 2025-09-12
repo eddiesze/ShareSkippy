@@ -3,6 +3,15 @@
  */
 
 /**
+ * Utility function to merge class names
+ * @param {...(string | undefined | null | false)} classes - Class names to merge
+ * @returns {string} - Merged class names
+ */
+export function cn(...classes) {
+  return classes.filter(Boolean).join(' ');
+}
+
+/**
  * Properly capitalizes location text
  * Handles state abbreviations, multi-word locations, and common exceptions
  * @param {string} text - The text to capitalize
