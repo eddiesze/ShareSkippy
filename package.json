@@ -2,12 +2,19 @@
   "name": "shareskippy",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@10.8.1",
+  "engines": {
+    "node": "^20.11.1"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "echo 'Typecheck configured in Task 2'",
+    "test": "echo 'Tests run in Task 9'",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
@@ -35,6 +42,7 @@
     "zod": "^4.1.8"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.5",
     "@types/react": "19.1.12",
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.10.1",

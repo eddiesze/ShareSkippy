@@ -29,6 +29,11 @@ ShareSkippy makes it easy for dog owners to find trusted community members who c
 4. Run the development server: `npm run dev`
 5. Open [http://localhost:3000](http://localhost:3000)
 
+## Development environment
+
+- Node: 20.x (see `.nvmrc`)
+- Package manager: npm (see `packageManager` in `package.json`)
+
 ## Environment Variables
 
 Create a `.env.local` file with:

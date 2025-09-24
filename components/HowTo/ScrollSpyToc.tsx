@@ -17,7 +17,7 @@ export default function ScrollSpyToc({ sections }: ScrollSpyTocProps) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
+      (entries: IntersectionObserverEntry[]) => {
         // Find the entry with the highest intersection ratio
         let maxRatio = 0;
         let maxEntry: IntersectionObserverEntry | null = null;
@@ -29,8 +29,9 @@ export default function ScrollSpyToc({ sections }: ScrollSpyTocProps) {
           }
         });
 
-        if (maxEntry && maxEntry.intersectionRatio > 0.1) {
-          setActiveId(maxEntry.target.id);
+        if (maxEntry && (maxEntry as IntersectionObserverEntry).intersectionRatio > 0.1) {
+          const targetEl = (maxEntry as IntersectionObserverEntry).target as Element;
+          setActiveId(targetEl.id);
         }
       },
       {

@@ -16,7 +16,7 @@ export async function GET() {
     console.log('Sending test email to:', testEmail);
     
     const { data, error } = await resend.emails.send({
-      from: 'ShareSkippy <onboarding@resend.dev>',
+      from: 'ShareSkippy <admin@send.shareskippy.com>',
       to: testEmail,
       subject: 'ShareSkippy Test Email ✅',
       html: `

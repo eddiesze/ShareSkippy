@@ -1,3 +1,7 @@
+const withNextBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig = {
   reactStrictMode: true,
   // Temporarily disable ESLint during build for production deployment
@@ -64,4 +68,4 @@ const nextConfig = {
   poweredByHeader: false,
 };
 
-module.exports = nextConfig;
+module.exports = withNextBundleAnalyzer(nextConfig);

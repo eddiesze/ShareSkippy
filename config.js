@@ -39,9 +39,9 @@ const config = {
   },
   resend: {
     // REQUIRED — Email 'From' field to be used when sending magic login links
-    fromNoReply: `ShareSkippy <noreply@kaia.dev>`,
+    fromNoReply: `ShareSkippy <noreply@send.shareskippy.com>`,
     // REQUIRED — Email 'From' field to be used when sending other emails, like abandoned carts, updates etc..
-    fromAdmin: `ShareSkippy <admin@kaia.dev>`,
+    fromAdmin: `ShareSkippy <admin@send.shareskippy.com>`,
     // Email shown to customer if need support. Leave empty if not needed => if empty, set up Crisp above, otherwise you won't be able to offer customer support."
     supportEmail: "support@kaia.dev",
   },
