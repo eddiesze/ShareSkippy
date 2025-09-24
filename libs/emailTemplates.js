@@ -369,6 +369,7 @@ The ShareSkippy Team 🐕`;
     subject: `How's ShareSkippy going? - 1 Week Check-in 📅`,
     html,
     text,
+    replyTo: 'support@kaia.dev',
   });
 }
 

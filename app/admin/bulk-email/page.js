@@ -146,7 +146,7 @@ export default function BulkEmailPage() {
               <h3 className="text-sm font-medium text-yellow-800 mb-2">⚠️ Important Notes:</h3>
               <ul className="text-sm text-yellow-700 space-y-1">
                 <li>• This will send emails to ALL users in your database</li>
-                <li>• Use personalization variables: {{first_name}}, {{last_name}}, {{email}}</li>
+                <li>• Use personalization variables: {'{{first_name}}'}, {'{{last_name}}'}, {'{{email}}'}</li>
                 <li>• Test with a small batch first</li>
                 <li>• Respect email rate limits to avoid being marked as spam</li>
               </ul>
