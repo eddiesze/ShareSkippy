@@ -195,10 +195,8 @@ export default function ProfileEditPage() {
       toast.success('Profile saved successfully!');
       console.log('Redirecting to share-availability page...');
       
-      // Use window.location for a full page reload to ensure auth state is properly loaded
-      setTimeout(() => {
-        window.location.href = '/share-availability';
-      }, 100);
+      // Use window.location for a full page navigation to ensure proper context loading
+      window.location.href = '/share-availability';
     } catch (err) {
       console.error('Error saving profile:', err);
       
