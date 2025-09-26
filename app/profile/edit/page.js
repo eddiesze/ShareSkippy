@@ -194,7 +194,11 @@ export default function ProfileEditPage() {
       console.log('Profile saved successfully:', data);
       toast.success('Profile saved successfully!');
       console.log('Redirecting to share-availability page...');
-      router.push('/share-availability');
+      
+      // Use window.location for a full page reload to ensure auth state is properly loaded
+      setTimeout(() => {
+        window.location.href = '/share-availability';
+      }, 100);
     } catch (err) {
       console.error('Error saving profile:', err);
       
