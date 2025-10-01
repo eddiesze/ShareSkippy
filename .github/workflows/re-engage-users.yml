@@ -1,0 +1,17 @@
+name: Re-engage Inactive Users
+
+on:
+  schedule:
+    # Run every Monday at 10 AM UTC
+    - cron: '0 10 * * 1'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  re-engage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-engage Inactive Users
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            "${{ secrets.APP_URL }}/api/admin/re-engage-inactive-users"

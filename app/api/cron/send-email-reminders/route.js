@@ -23,8 +23,8 @@ export async function GET() {
         recipient_dog:dogs!meetings_recipient_dog_id_fkey(name)
       `)
       .eq('status', 'confirmed')
-      .gte('start_datetime', tomorrow.toISOString())
-      .lt('start_datetime', dayAfter.toISOString());
+      .gte('scheduled_date', tomorrow.toISOString())
+      .lt('scheduled_date', dayAfter.toISOString());
 
     if (meetingsError) {
       console.error('Error fetching meetings:', meetingsError);
@@ -44,8 +44,8 @@ export async function GET() {
           userDogName: meeting.requester_dog?.name || 'your dog',
           otherUserName: `${meeting.recipient.first_name} ${meeting.recipient.last_name}`.trim(),
           otherUserDogName: meeting.recipient_dog?.name || 'their dog',
-          meetingDate: new Date(meeting.start_datetime).toLocaleDateString(),
-          meetingTime: new Date(meeting.start_datetime).toLocaleTimeString([], { 
+          meetingDate: new Date(meeting.scheduled_date).toLocaleDateString(),
+          meetingTime: new Date(meeting.scheduled_date).toLocaleTimeString([], { 
             hour: '2-digit', 
             minute: '2-digit' 
           }),
@@ -64,8 +64,8 @@ export async function GET() {
           userDogName: meeting.recipient_dog?.name || 'your dog',
           otherUserName: `${meeting.requester.first_name} ${meeting.requester.last_name}`.trim(),
           otherUserDogName: meeting.requester_dog?.name || 'their dog',
-          meetingDate: new Date(meeting.start_datetime).toLocaleDateString(),
-          meetingTime: new Date(meeting.start_datetime).toLocaleTimeString([], { 
+          meetingDate: new Date(meeting.scheduled_date).toLocaleDateString(),
+          meetingTime: new Date(meeting.scheduled_date).toLocaleTimeString([], { 
             hour: '2-digit', 
             minute: '2-digit' 
           }),

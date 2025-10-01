@@ -132,44 +132,48 @@ export default function ShareAvailability() {
         const lat = parseFloat(result.lat);
         const lng = parseFloat(result.lon);
         
-        let neighborhood = '';
-        
-        // Try to extract neighborhood from address details
-        if (result.address) {
-          neighborhood = result.address.suburb || result.address.quarter || result.address.neighbourhood || result.address.district || '';
-        }
-        
-        // If no neighborhood found, try to extract from display name
-        if (!neighborhood) {
-          const addressParts = result.display_name.split(', ');
-          
-          // Look for common neighborhood patterns
-          for (let i = 0; i < addressParts.length; i++) {
-            const part = addressParts[i].toLowerCase();
-            if (part.includes('hills') || part.includes('heights') || part.includes('park') || 
-                part.includes('valley') || part.includes('ridge') || part.includes('grove') ||
-                part.includes('commons') || part.includes('square') || part.includes('plaza') ||
-                part.includes('north') || part.includes('south') || part.includes('east') || part.includes('west')) {
-              neighborhood = addressParts[i];
-              break;
-            }
-          }
-        }
+        // Pick area (first available) with mid-sized labels preferred:
+        const area =
+          result.address.suburb ||
+          result.address.city_district ||
+          result.address.borough ||
+          result.address.quarter ||
+          result.address.ward ||
+          result.address.district ||
+          result.address.neighborhood ||      // US spelling
+          result.address.neighbourhood ||     // Intl spelling
+          result.address.locality ||
+          result.address.residential ||
+          '';
 
-        // Update form data with verified location (with proper capitalization)
-        const formattedLocation = formatLocation({
-          neighborhood: neighborhood,
-          city: formData.custom_location_city,
-          state: formData.custom_location_state
+        // Always pick a city string (fallback chain):
+        const city =
+          result.address.city ||
+          result.address.town ||
+          result.address.village ||
+          result.address.municipality ||
+          result.address.hamlet ||
+          '';
+
+        // State (if present):
+        const state = result.address.state || '';
+
+        // Then keep existing formatting:
+        const formatted = formatLocation({
+          neighborhood: area || '',
+          city,
+          state
         });
+        
+        // Update form data with verified location (with proper capitalization)
         
         setFormData(prev => ({
           ...prev,
           custom_location_lat: lat,
           custom_location_lng: lng,
-          custom_location_neighborhood: formattedLocation.neighborhood,
-          custom_location_city: formattedLocation.city,
-          custom_location_state: formattedLocation.state
+          custom_location_neighborhood: formatted.neighborhood,
+          custom_location_city: formatted.city,
+          custom_location_state: formatted.state
         }));
 
         setError(null);

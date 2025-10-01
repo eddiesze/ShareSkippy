@@ -168,7 +168,7 @@ describe('Email API Integration Tests', () => {
             status: 'confirmed',
             requester_id: 'requester-id',
             recipient_id: 'recipient-id',
-            start_datetime: '2024-01-15T14:00:00Z',
+            scheduled_date: '2024-01-15T14:00:00Z',
             location: 'Central Park',
             notes: 'Bring treats!',
             requester: { first_name: 'John', last_name: 'Doe', email: 'john@example.com' },
@@ -242,7 +242,7 @@ describe('Email API Integration Tests', () => {
         data: [{
           id: 'meeting-123',
           status: 'confirmed',
-          start_datetime: tomorrow.toISOString(),
+          scheduled_date: tomorrow.toISOString(),
           location: 'Central Park',
           requester_id: 'requester-id',
           recipient_id: 'recipient-id',

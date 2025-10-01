@@ -1,6 +1,58 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
+import { toast } from 'react-hot-toast';
+
+function ReEngageButton() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleReEngage = async () => {
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('/api/admin/re-engage-inactive-users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(`Re-engagement emails sent! ${data.emailsSent} emails sent to ${data.usersProcessed} inactive users`);
+      } else {
+        toast.error(data.error || 'Failed to send re-engagement emails');
+      }
+    } catch (error) {
+      console.error('Error sending re-engagement emails:', error);
+      toast.error('Failed to send re-engagement emails');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleReEngage}
+      disabled={isLoading}
+      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {isLoading ? (
+        <>
+          <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Sending...
+        </>
+      ) : (
+        'Re-engage Inactive Users'
+      )}
+    </button>
+  );
+}
 
 export default function AdminDashboard() {
   return (
@@ -32,6 +84,25 @@ export default function AdminDashboard() {
             >
               Manage Bulk Emails
             </Link>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm p-6 border">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-orange-100 rounded-md flex items-center justify-center">
+                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+            <div className="ml-4">
+              <h3 className="text-lg font-medium text-gray-900">Re-engage Users</h3>
+              <p className="text-sm text-gray-500">Send emails to inactive users</p>
+            </div>
+          </div>
+          <div className="mt-4">
+            <ReEngageButton />
           </div>
         </div>
 

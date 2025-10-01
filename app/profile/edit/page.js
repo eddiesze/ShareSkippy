@@ -260,44 +260,48 @@ export default function ProfileEditPage() {
         const lat = parseFloat(result.lat);
         const lng = parseFloat(result.lon);
         
-        let neighborhood = '';
-        
-        // Try to extract neighborhood from address details
-        if (result.address) {
-          neighborhood = result.address.suburb || result.address.quarter || result.address.neighbourhood || result.address.district || '';
-        }
-        
-        // If no neighborhood found, try to extract from display name
-        if (!neighborhood) {
-          const addressParts = result.display_name.split(', ');
-          
-          // Look for common neighborhood patterns
-          for (let i = 0; i < addressParts.length; i++) {
-            const part = addressParts[i].toLowerCase();
-            if (part.includes('hills') || part.includes('heights') || part.includes('park') || 
-                part.includes('valley') || part.includes('ridge') || part.includes('grove') ||
-                part.includes('commons') || part.includes('square') || part.includes('plaza') ||
-                part.includes('north') || part.includes('south') || part.includes('east') || part.includes('west')) {
-              neighborhood = addressParts[i];
-              break;
-            }
-          }
-        }
+        // Pick area (first available) with mid-sized labels preferred:
+        const area =
+          result.address.suburb ||
+          result.address.city_district ||
+          result.address.borough ||
+          result.address.quarter ||
+          result.address.ward ||
+          result.address.district ||
+          result.address.neighborhood ||      // US spelling
+          result.address.neighbourhood ||     // Intl spelling
+          result.address.locality ||
+          result.address.residential ||
+          '';
 
-        // Update profile with verified location (with proper capitalization)
-        const formattedLocation = formatLocation({
-          neighborhood: neighborhood,
-          city: profile.city,
-          state: profile.state
+        // Always pick a city string (fallback chain):
+        const city =
+          result.address.city ||
+          result.address.town ||
+          result.address.village ||
+          result.address.municipality ||
+          result.address.hamlet ||
+          '';
+
+        // State (if present):
+        const state = result.address.state || '';
+
+        // Then keep existing formatting:
+        const formatted = formatLocation({
+          neighborhood: area || '',
+          city,
+          state
         });
+        
+        // Update profile with verified location (with proper capitalization)
         
         setProfile(prev => ({
           ...prev,
           display_lat: lat,
           display_lng: lng,
-          neighborhood: formattedLocation.neighborhood,
-          city: formattedLocation.city,
-          state: formattedLocation.state
+          neighborhood: formatted.neighborhood,
+          city: formatted.city,
+          state: formatted.state
         }));
 
         setAddressVerified(true);
