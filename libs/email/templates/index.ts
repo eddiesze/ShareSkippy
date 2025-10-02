@@ -58,16 +58,37 @@ export async function loadEmailTemplate(
     throw new Error(`Unknown email type: ${emailType}`);
   }
 
-  const templatesDir = path.join(__dirname);
-  
-  // Load HTML template
-  const htmlPath = path.join(templatesDir, templateConfig.html);
-  let html = fs.readFileSync(htmlPath, 'utf8');
-  
-  // Load text template
-  const textPath = path.join(templatesDir, templateConfig.text);
+  // Try multiple paths for template loading (production compatibility)
+  const possiblePaths = [
+    path.join(process.cwd(), 'libs', 'email', 'templates'),
+    path.join(process.cwd(), 'email-templates'),
+    path.join(__dirname),
+    path.join(process.cwd(), 'libs', 'email', 'templates', 'email-templates')
+  ];
+
+  let html = '';
   let text = '';
+  let templatesDir = '';
+
+  // Try to find templates in different locations
+  for (const templatePath of possiblePaths) {
+    try {
+      const htmlPath = path.join(templatePath, templateConfig.html);
+      html = fs.readFileSync(htmlPath, 'utf8');
+      templatesDir = templatePath;
+      break;
+    } catch (error) {
+      // Continue to next path
+    }
+  }
+
+  if (!html) {
+    throw new Error(`Template not found: ${templateConfig.html}. Tried paths: ${possiblePaths.join(', ')}`);
+  }
+
+  // Load text template
   try {
+    const textPath = path.join(templatesDir, templateConfig.text);
     text = fs.readFileSync(textPath, 'utf8');
   } catch (error) {
     // If text template doesn't exist, generate from HTML
