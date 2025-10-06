@@ -17,7 +17,7 @@ const TEMPLATE_REGISTRY = {
   welcome: {
     html: 'welcome-email.html',
     text: 'welcome-email.txt',
-    subject: (vars: TemplateVariables) => `Welcome to ShareSkippy, ${vars.userName || 'there'}! 🐕`
+    subject: (vars: TemplateVariables) => `Welcome to ShareSkippy${vars.userName ? `, ${vars.userName}` : ''}!`
   },
   nurture_day3: {
     html: 'follow-up-3days.html',
