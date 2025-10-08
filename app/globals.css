@@ -2,9 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --vh: 1dvh;
+}
+
+html, body, #__next {
+  height: 100%;
+}
+
 html,
 body {
   scroll-behavior: smooth !important;
+}
+
+.ios-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+.min-h-0 {
+  min-height: 0 !important;
+}
+
+.p-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
 
 /* It makes the HTML progress bar filling smooth when value change. */

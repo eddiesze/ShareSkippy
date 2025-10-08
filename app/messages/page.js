@@ -232,31 +232,35 @@ export default function MessagesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" style={{ height: '100vh', overflow: 'hidden' }}>
-      <div className="max-w-6xl mx-auto py-4 sm:py-8 px-4 h-full">
-        {/* Header */}
-        <div className="mb-4 sm:mb-8">
-          <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            💬 Messages
-          </h1>
-          <p className="text-gray-600 text-sm sm:text-base">Connect with other dog lovers in your community</p>
-        </div>
+    <div
+      className="
+        flex flex-col
+        h-[calc(100dvh)] md:h-screen
+        overflow-hidden
+        bg-white
+      "
+    >
+      {/* Header */}
+      <div className="flex-shrink-0 border-b px-4 py-3 bg-white">
+        <h1 className="text-base sm:text-lg font-semibold">💬 Messages</h1>
+        <p className="text-sm text-gray-600">Connect with other dog lovers in your community</p>
+      </div>
 
-        <div className="bg-white rounded-lg shadow-md overflow-hidden flex-1 flex flex-col">
-          <div className="flex flex-col lg:flex-row flex-1 min-h-0">
-            {/* Conversations Sidebar */}
-            <div className={`w-full lg:w-1/3 border-r border-gray-200 bg-gray-50 flex flex-col ${showConversations ? 'block' : 'hidden lg:flex'}`}>
-              <div className="p-4 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
-                <h2 className="text-lg font-semibold text-gray-900">Conversations</h2>
-                <button
-                  onClick={() => setShowConversations(false)}
-                  className="lg:hidden text-gray-500 hover:text-gray-700"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="overflow-y-auto flex-1" style={{ WebkitOverflowScrolling: 'touch' }}>
+      {/* Body: Sidebar + Thread */}
+      <div className="flex-1 min-h-0 flex overflow-hidden">
+        {/* Sidebar */}
+        <aside className={`w-full lg:w-80 border-r border-gray-200 bg-gray-50 flex flex-col min-h-0 ${showConversations ? 'flex' : 'hidden lg:flex'}`}>
+          <div className="p-4 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
+            <h2 className="text-lg font-semibold text-gray-900">Conversations</h2>
+            <button
+              onClick={() => setShowConversations(false)}
+              className="lg:hidden text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+          </div>
+          
+          <div className="flex-1 min-h-0 overflow-y-auto ios-scroll">
                 {loading ? (
                   <div className="p-4 text-center">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
@@ -308,12 +312,12 @@ export default function MessagesPage() {
               </div>
             </div>
 
-            {/* Messages Area */}
-            <div className="flex-1 flex flex-col w-full lg:w-auto min-h-0">
-              {selectedConversation ? (
-                <>
-                  {/* Conversation Header */}
-                  <div className="p-3 sm:p-4 border-b border-gray-200 bg-white flex-shrink-0">
+        {/* Thread */}
+        <section className="flex-1 min-h-0 flex flex-col">
+          {selectedConversation ? (
+            <>
+              {/* Conversation Header */}
+              <div className="flex-shrink-0 border-b px-3 py-2 bg-white">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                       <div className="flex items-center space-x-3">
                         <button
@@ -356,8 +360,17 @@ export default function MessagesPage() {
                     </div>
                   </div>
 
-                  {/* Messages */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ WebkitOverflowScrolling: 'touch' }}>
+              {/* Scrollable Messages */}
+              <div
+                id="message-scroll"
+                className="
+                  flex-1 min-h-0
+                  overflow-y-auto ios-scroll
+                  px-3 py-2
+                  bg-gray-50
+                  break-words
+                "
+              >
                     {messages.map((message) => (
                       <div
                         key={message.id}
@@ -379,10 +392,11 @@ export default function MessagesPage() {
                         </div>
                       </div>
                     ))}
-                  </div>
+                <div id="bottom-anchor" />
+              </div>
 
-                  {/* Message Input */}
-                  <div className="p-3 sm:p-4 border-t border-gray-200 flex-shrink-0">
+              {/* Message Input */}
+              <div className="flex-shrink-0 border-t bg-white p-3 p-safe">
                     <form onSubmit={sendMessage} className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                       <input
                         type="text"
@@ -417,9 +431,8 @@ export default function MessagesPage() {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
-        </div>
+        </section>
+      </div>
 
         {/* Message Modal */}
         <MessageModal
