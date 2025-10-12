@@ -125,7 +125,16 @@ export default function WelcomePage() {
         .eq('id', conversationId);
 
       setSent((prev) => ({ ...prev, [matchUserId]: true }));
-      toast.success(`Interest sent to ${matchName}!`);
+      
+      // Show success message and redirect to share availability
+      toast.success(`Your interest was successfully sent! Share your availability now.`, {
+        duration: 3000,
+      });
+      
+      // Redirect after a brief delay
+      setTimeout(() => {
+        router.push('/share-availability');
+      }, 1500);
     } catch (error) {
       console.error('Error sending interest:', error);
       toast.error('Failed to send interest. Please try again.');
@@ -155,9 +164,7 @@ export default function WelcomePage() {
           </h1>
           <p className="text-lg text-gray-600">
             {matches.length > 0
-              ? `We found ${matches.length} ${
-                  matches.length === 1 ? 'person' : 'people'
-                } near you. Say hi now!`
+              ? 'Here are a few people near you. Reach out now!'
               : 'Looking for matches in your area...'}
           </p>
         </div>
@@ -261,12 +268,6 @@ export default function WelcomePage() {
                         ) : (
                           '💬 Send Interest'
                         )}
-                      </button>
-                      <button
-                        onClick={() => router.push(`/profile/${match.id}`)}
-                        className="px-5 py-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                      >
-                        View Profile
                       </button>
                     </div>
                   </div>
