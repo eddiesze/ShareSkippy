@@ -66,14 +66,13 @@ npm run validate  # Runs all checks: formatting, linting, type checking, tests
 - Node: 20.x (see `.nvmrc`)
 - Package manager: npm (see `packageManager` in `package.json`)
 
-## Environment Variables
+## Local Authentication
 
-Create a `.env.local` file with:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+- Google authentication requires setting up a GCP project for authentication and adding your own API key to the project.
+- Magic link is the preferred method of local authentication.
+  1.  Navigate to sign in, enter your email, and click the magic link button.
+  2.  Navigate to http://localhost:54324 to find the email with the magic link.
+  3.  Click the link. It will automatically open a new tab to the app.
 
 ## Contributing
 
