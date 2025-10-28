@@ -185,7 +185,7 @@ export default function WelcomePage() {
                   <Image
                     src={match.profile_photo_url || '/default-avatar.png'}
                     alt={match.first_name}
-                    className="w-20 h-20 rounded-full object-cover flex-shrink-0"
+                    className="w-20 h-20 rounded-full object-cover shrink-0"
                   />
 
                   {/* Profile Info */}
@@ -300,7 +300,7 @@ export default function WelcomePage() {
         )}
 
         {/* Availability Upsell */}
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-6 text-center">
+        <div className="bg-linear-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-6 text-center">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">🌟 Want Even More Matches?</h3>
           <p className="text-gray-700 mb-4">
             Share your availability to help people know when you&apos;re free. You&apos;ll show up

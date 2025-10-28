@@ -340,7 +340,7 @@ export default function MessagesPage() {
       "
     >
       {/* Header */}
-      <div className="flex-shrink-0 border-b px-4 py-4 bg-white">
+      <div className="shrink-0 border-b px-4 py-4 bg-white">
         <h1 className="text-lg sm:text-xl font-semibold">💬 Messages</h1>
         <p className="text-sm text-gray-600 mt-1">
           Connect with other dog lovers in your community
@@ -353,7 +353,7 @@ export default function MessagesPage() {
         <aside
           className={`w-full lg:w-80 border-r border-gray-200 bg-gray-50 flex flex-col min-h-0 ${showConversations ? 'flex' : 'hidden lg:flex'}`}
         >
-          <div className="p-4 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
+          <div className="p-4 border-b border-gray-200 flex items-center justify-between shrink-0">
             <h2 className="text-lg font-semibold text-gray-900">Conversations</h2>
             <button
               onClick={() => setShowConversations(false)}
@@ -393,7 +393,7 @@ export default function MessagesPage() {
                         className="w-12 h-12 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center text-lg font-medium text-gray-600">
+                      <div className="w-12 h-12 bg-linear-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center text-lg font-medium text-gray-600">
                         {conversation.displayName?.[0] || '👤'}
                       </div>
                     )}
@@ -420,7 +420,7 @@ export default function MessagesPage() {
           {selectedConversation ? (
             <>
               {/* Conversation Header */}
-              <div className="flex-shrink-0 border-b px-4 py-4 bg-white">
+              <div className="shrink-0 border-b px-4 py-4 bg-white">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                   <div className="flex items-center space-x-3">
                     <button
@@ -436,7 +436,7 @@ export default function MessagesPage() {
                         className="w-12 h-12 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center text-lg font-medium text-gray-600">
+                      <div className="w-12 h-12 bg-linear-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center text-lg font-medium text-gray-600">
                         {selectedConversation.displayName?.[0] || '👤'}
                       </div>
                     )}
@@ -475,7 +475,7 @@ export default function MessagesPage() {
                   overflow-y-auto overflow-x-hidden ios-scroll
                   px-4 py-4
                   bg-gray-50
-                  break-words
+                  wrap-break-word
                   space-y-3
                   max-w-full
                 "
@@ -486,7 +486,7 @@ export default function MessagesPage() {
                     className={`flex ${message.sender_id === user.id ? 'justify-end' : 'justify-start'} message-container`}
                   >
                     <div
-                      className={`message-bubble px-4 py-3 rounded-2xl break-words shadow-sm max-w-full ${
+                      className={`message-bubble px-4 py-3 rounded-2xl wrap-break-word shadow-xs max-w-full ${
                         message.sender_id === user.id
                           ? 'bg-blue-600 text-white'
                           : 'bg-white text-gray-900 border border-gray-200'
@@ -523,7 +523,7 @@ export default function MessagesPage() {
                           fetchMessages(selectedConversation.id);
                         }
                       }}
-                      className="mt-2 px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
+                      className="mt-2 px-3 py-1 bg-red-600 text-white text-sm rounded-sm hover:bg-red-700 transition-colors"
                     >
                       Retry
                     </button>
@@ -534,7 +534,7 @@ export default function MessagesPage() {
               </div>
 
               {/* Message Input */}
-              <div className="flex-shrink-0 border-t bg-white p-4 p-safe">
+              <div className="shrink-0 border-t bg-white p-4 p-safe">
                 <form
                   onSubmit={sendMessage}
                   className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 message-input"
@@ -555,7 +555,7 @@ export default function MessagesPage() {
                       textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
                     }}
                     placeholder="Type your message..."
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm auto-resize-textarea"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm auto-resize-textarea"
                     disabled={sending}
                     rows={1}
                   />

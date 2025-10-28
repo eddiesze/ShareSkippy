@@ -316,7 +316,7 @@ export default function ProfileEditPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Basic Information</h2>
 
           <div className="space-y-4">
@@ -439,7 +439,7 @@ export default function ProfileEditPage() {
         </div>
 
         {/* Social Media Links */}
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Social Media Links</h2>
           <p className="text-sm text-gray-600 mb-4">
             To help verify your identity and build trust in the community, please share your social
@@ -537,7 +537,7 @@ export default function ProfileEditPage() {
         </div>
 
         {/* Location */}
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Location</h2>
           <p className="text-sm text-gray-600 mb-4">
             Enter your address to help community members find you. Only your neighborhood and city
@@ -652,7 +652,7 @@ export default function ProfileEditPage() {
         </div>
 
         {/* Emergency Contact */}
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Emergency Contact</h2>
           <p className="text-sm text-gray-600 mb-4">
             Optional emergency contact information for safety purposes.

@@ -82,7 +82,7 @@ export default function PublicProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen w-full bg-linear-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading profile...</p>
@@ -93,7 +93,7 @@ export default function PublicProfilePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen w-full bg-linear-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="max-w-md mx-auto p-6 text-center space-y-4">
           <h2 className="text-2xl font-bold text-red-600">Error</h2>
           <p className="text-gray-600">{error}</p>
@@ -118,7 +118,7 @@ export default function PublicProfilePage() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen w-full bg-linear-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="max-w-md mx-auto p-6 text-center space-y-4">
           <h2 className="text-2xl font-bold text-gray-900">Profile Not Found</h2>
           <p className="text-gray-600">
@@ -162,7 +162,7 @@ export default function PublicProfilePage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen w-full bg-linear-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6">
@@ -189,7 +189,7 @@ export default function PublicProfilePage() {
                 className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-100"
               />
             ) : (
-              <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center text-4xl border-4 border-blue-100">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center text-4xl border-4 border-blue-100">
                 {getRoleIcon(profile.role)}
               </div>
             )}
@@ -260,7 +260,7 @@ export default function PublicProfilePage() {
 
           {/* Community Support Preferences */}
           {(profile.support_preferences?.length > 0 || profile.support_story) && (
-            <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+            <div className="mb-6 p-4 bg-linear-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
               <h3 className="font-semibold text-gray-900 mb-3">Community Support Preferences</h3>
 
               {/* Support Preferences */}

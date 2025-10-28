@@ -65,7 +65,7 @@ export default function ProfilePage() {
         <p className="text-gray-600">{error}</p>
         <button
           onClick={() => window.location.reload()}
-          className="inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+          className="inline-block bg-blue-500 text-white px-6 py-2 rounded-sm hover:bg-blue-600"
         >
           Try Again
         </button>
@@ -80,7 +80,7 @@ export default function ProfilePage() {
         <p className="text-gray-600">Please complete your profile setup.</p>
         <Link
           href="/profile/edit"
-          className="inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+          className="inline-block bg-blue-500 text-white px-6 py-2 rounded-sm hover:bg-blue-600"
         >
           Create Your Profile
         </Link>
@@ -126,13 +126,13 @@ export default function ProfilePage() {
         <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <Link
             href="/profile/edit"
-            className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="inline-block bg-blue-500 text-white px-4 py-2 rounded-sm hover:bg-blue-600"
           >
             ✏️ Edit Profile
           </Link>
           <button
             onClick={() => setShowDeleteModal(true)}
-            className="inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
+            className="inline-block bg-red-600 text-white px-4 py-2 rounded-sm hover:bg-red-700 transition-colors"
           >
             🗑️ Delete Account
           </button>
@@ -143,14 +143,14 @@ export default function ProfilePage() {
       <DeletionRequestStatus userId={profile.id} />
 
       <div className="space-y-3">
-        <div className="bg-gray-50 p-3 rounded">
+        <div className="bg-gray-50 p-3 rounded-sm">
           <span className="font-medium text-gray-700">Role:</span>
           <span className="ml-2 capitalize">{profile.role}</span>
         </div>
 
         {/* Community Support Preferences */}
         {(profile.support_preferences?.length > 0 || profile.support_story) && (
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded border border-blue-200">
+          <div className="bg-linear-to-r from-blue-50 to-purple-50 p-4 rounded-sm border border-blue-200">
             <h3 className="font-medium text-gray-800 mb-3">Community Support Preferences</h3>
 
             {/* Support Preferences */}
@@ -163,7 +163,7 @@ export default function ProfilePage() {
                   {profile.support_preferences.map((pref) => (
                     <span
                       key={pref}
-                      className="inline-flex items-center bg-gray-100 text-gray-700 px-2 py-1 rounded text-sm"
+                      className="inline-flex items-center bg-gray-100 text-gray-700 px-2 py-1 rounded-sm text-sm"
                     >
                       {pref === 'elderly_dog_owners' && '👴🐕 Elderly dog owners'}
                       {pref === 'sick_recovering' && '🏥 Sick or recovering owners'}
@@ -190,7 +190,7 @@ export default function ProfilePage() {
         )}
 
         {profile.bio && (
-          <div className="bg-gray-50 p-3 rounded">
+          <div className="bg-gray-50 p-3 rounded-sm">
             <span className="font-medium text-gray-700">Bio:</span>
             <p className="mt-1">{profile.bio}</p>
           </div>
@@ -201,7 +201,7 @@ export default function ProfilePage() {
           profile.instagram_url ||
           profile.linkedin_url ||
           profile.airbnb_url) && (
-          <div className="bg-gray-50 p-3 rounded">
+          <div className="bg-gray-50 p-3 rounded-sm">
             <span className="font-medium text-gray-700">Social Links:</span>
             <div className="mt-2 space-y-1">
               {profile.facebook_url && (
@@ -253,7 +253,7 @@ export default function ProfilePage() {
       {profile.neighborhood && profile.city && (
         <div className="space-y-2">
           <h3 className="font-medium text-gray-700">Location</h3>
-          <div className="bg-gray-50 p-3 rounded">
+          <div className="bg-gray-50 p-3 rounded-sm">
             {(() => {
               const formattedLocation = formatLocation({
                 neighborhood: profile.neighborhood,

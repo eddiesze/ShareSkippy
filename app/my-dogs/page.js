@@ -120,7 +120,7 @@ export default function MyDogsPage() {
             {dogs.map((dog) => (
               <div
                 key={dog.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl shadow-xs border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
               >
                 {/* Dog Photo */}
                 <div className="aspect-square bg-gray-100 relative group">
